@@ -1,5 +1,6 @@
 
 import './App.css'
+import DataTable from './component/DataTable'
 import InputForm from './component/InputForm'
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
 
         <h1 className='text-4xl text-center font-semibold text-slate-300'>Input Form</h1>
         <InputForm />
+        <DataTable />
       </div>
     </div>
   )

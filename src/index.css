@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input:-webkit-autofill {
+  background-color: #475569 !important; /* Change to your desired background color */
+  -webkit-box-shadow: 0 0 0px 1000px #475569 inset !important;
+  -webkit-text-fill-color: white !important; /* Change to your desired text color */
+  border-color: #475569 !important; /* Change to match the input border */
+}
+
+table,tr,th,td{
+  border: 1px solid white;
+}
