@@ -29,7 +29,7 @@ const ViewData: React.FC = () => {
         const newData = data.filter((item: FormData) => {
             return item.id != id;
         })
-        console.log(newData)
+        // console.log(newData)
 
         //set new to localstorate
         localStorage.setItem("datas", JSON.stringify(newData));
@@ -47,7 +47,7 @@ const ViewData: React.FC = () => {
     }
 
     const handleEdit = (id:string) =>{
-        console.log(id)
+        // console.log(id)
         setId(id);
         //scroll to the form at top smoothly
         window.scrollTo({
@@ -63,7 +63,7 @@ const ViewData: React.FC = () => {
 
         const data = getAllData();
         setTotal(data.length);
-        const dataToDisplay = data.filter((item: FormData, index: number) => {
+        const dataToDisplay = data.filter((_, index: number) => {
             return index >= paginationStart && index < paginationStart + perpage;
         })
         setData(dataToDisplay);

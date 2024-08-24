@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from 'react'
+import React, { createContext, ReactNode, useState } from 'react';
 
 interface EditContextProps {
     id: string | undefined;

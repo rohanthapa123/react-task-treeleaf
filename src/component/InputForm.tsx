@@ -2,12 +2,11 @@ import { useFormik } from 'formik';
 import React, { useContext, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 import * as yup from 'yup';
-import { FormData } from '../Types/UserInfoType';
+import { EditContext } from '../context/EditContext';
 import { getCountries } from '../utils/api/fetch';
 import { getAllData, getDataById } from '../utils/fetchFromLocal';
-import { EditContext } from '../context/EditContext';
-import { v4 as uuidv4 } from 'uuid';
 
 
 const inputSchema = yup.object({
@@ -49,7 +48,8 @@ const InputForm: React.FC = () => {
             image: ''
         },
         validationSchema: inputSchema,
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
+            
             const existingValue = getAllData();
             if (id) {
                 const index = existingValue.findIndex((item) => item.id === id);
@@ -64,7 +64,7 @@ const InputForm: React.FC = () => {
                 values.id = uuidv4();
                 existingValue.push(values);
             }
-            console.log(values);
+            // console.log(values);
             localStorage.setItem("datas", JSON.stringify(existingValue));
             formik.resetForm();
             window.dispatchEvent(new Event("storage"))
@@ -90,9 +90,9 @@ const InputForm: React.FC = () => {
                 province: data.province || '',
                 image: data.image || ''
             });
-            console.log("Data successfully fetched and set in form:", data);
+            // console.log("Data successfully fetched and set in form:", data);
         } else {
-            console.log("No data found for id:", id);
+            // console.log("No data found for id:", id);
         }
 
     }
