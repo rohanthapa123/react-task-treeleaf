@@ -1,12 +1,17 @@
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { FormData } from '../Types/UserInfoType';
 import { getCountries } from '../utils/api/fetch';
+import { getAllData, getDataById } from '../utils/fetchFromLocal';
+import { EditContext } from '../context/EditContext';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const inputSchema = yup.object({
+    id: yup.string(),
     name: yup.string().required("Name is required"),
     email: yup.string().email("Email must be valid").required("Email is required"),
     phone: yup.number().min(1000000, "Phone number must be minimum 7 digits").required("Phone Number is required"),
@@ -20,7 +25,11 @@ const inputSchema = yup.object({
 
 
 
+
 const InputForm: React.FC = () => {
+
+    const { id, setId } = useContext(EditContext)!;
+
     const { data: countries } = useQuery({
         queryKey: ["country"],
         queryFn: getCountries,
@@ -28,6 +37,7 @@ const InputForm: React.FC = () => {
 
     const formik = useFormik({
         initialValues: {
+            id: '',
             name: '',
             email: '',
             phone: '',
@@ -40,17 +50,60 @@ const InputForm: React.FC = () => {
         },
         validationSchema: inputSchema,
         onSubmit: (values) => {
+            const existingValue = getAllData();
+            if (id) {
+                const index = existingValue.findIndex((item) => item.id === id);
+                if (index !== -1) {
+                    existingValue[index] = { ...values };
+                } else {
+                    toast.error("Record not found for update");
+                    return;
+                }
+                setId(undefined);
+            } else {
+                values.id = uuidv4();
+                existingValue.push(values);
+            }
             console.log(values);
-            const existingStringData = localStorage.getItem("datas");
-            const existingValue: FormData[] = existingStringData ? JSON.parse(existingStringData) : [];
-            existingValue.push(values);
             localStorage.setItem("datas", JSON.stringify(existingValue));
             formik.resetForm();
             window.dispatchEvent(new Event("storage"))
             toast.success("Successfully Added");
+
         }
     });
 
+    const getData = (id: string) => {
+
+        const result = getDataById(id);
+        const data = result[0];
+        if (data) {
+            formik.setValues({
+                id: data.id || '',
+                name: data.name || '',
+                email: data.email || '',
+                phone: data.phone || '',
+                dob: data.dob || '',
+                city: data.city || '',
+                district: data.district || '',
+                country: data.country || 'Nepal',
+                province: data.province || '',
+                image: data.image || ''
+            });
+            console.log("Data successfully fetched and set in form:", data);
+        } else {
+            console.log("No data found for id:", id);
+        }
+
+    }
+
+    useEffect(() => {
+        if (id !== undefined) {
+
+            getData(id);
+        }
+        // console.log(id);
+    }, [id])
 
     return (
         <form className="p-8 w-[100%] sm:w-[90%] md:w-[80%] lg:w-[60%] m-auto rounded-lg bg-slate-500 mt-4 text-white" onSubmit={formik.handleSubmit}>
@@ -113,7 +166,7 @@ const InputForm: React.FC = () => {
                 </label>
                 <input
                     className="w-full p-2 rounded-md bg-slate-600 border-slate-800 placeholder:text-slate-300 mt-1 focus:outline-none"
-                    type="text"
+                    type="number"
                     name="phone"
                     id="phone"
                     placeholder="Enter Your Phone Number"
@@ -270,7 +323,7 @@ const InputForm: React.FC = () => {
                 type="submit"
                 className="bg-blue-600 text-white p-2 rounded-lg mt-4"
             >
-                Submit
+                {id ? "Update" : "Submit"}
             </button>
         </form>
     );
