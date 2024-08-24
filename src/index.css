@@ -10,5 +10,17 @@ input:-webkit-autofill {
 }
 
 table,tr,th,td{
-  border: 1px solid white;
+  /* border: 1px solid white; */
+  @apply text-left
+}
+
+thead{
+  @apply bg-slate-400
+}
+th{
+  @apply py-4 px-1
+}
+
+tbody > tr{
+  @apply border-b border-b-gray-300 hover:bg-slate-400
 }

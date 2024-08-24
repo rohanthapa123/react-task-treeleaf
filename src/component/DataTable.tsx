@@ -1,15 +1,23 @@
-import React, { useEffect } from 'react'
+import React from 'react';
+import { FiEdit } from 'react-icons/fi';
+import { MdDeleteOutline } from "react-icons/md";
 import { FormData } from '../Types/UserInfoType';
 
-const DataTable: React.FC = () => {
+interface DataTableProps {
+    data: FormData[];
+    handleDelete: any;
+    handleEdit: any;
+}
 
-    const stringData = localStorage.getItem("datas")
-    const data = stringData ? JSON.parse(stringData) : [];
+const DataTable: React.FC<DataTableProps> = ({ data, handleDelete, handleEdit }) => {
+
+
 
     return (
-        <div className='p-8 w-[80%] m-auto rounded-lg bg-slate-500 mt-10 text-white'>
-            <h1 className='text-4xl font-semibold text-center mb-4'>My Datas</h1>
-            <table className='border-2 w-full'>
+        <div className=''>
+
+
+            <table className=' w-full min-w-[800px]'>
                 <thead>
                     <tr>
                         <th>S.N</th>
@@ -32,8 +40,17 @@ const DataTable: React.FC = () => {
                                 <th>{item.phone}</th>
                                 <th>{item.dob}</th>
                                 <th>{item.country}</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th className='text-center '>
+                                    <button onClick={() => handleEdit(index)}>
+                                        <FiEdit className='m-auto cursor-pointer' color='green' size={24} />
+                                    </button>
+                                </th>
+                                <th className='text-center '>
+                                    <button onClick={() => handleDelete(index)}>
+
+                                        <MdDeleteOutline className='m-auto cursor-pointer' color='red' size={24} />
+                                    </button>
+                                </th>
 
                             </tr>
                         })
@@ -41,6 +58,7 @@ const DataTable: React.FC = () => {
 
                 </tbody>
             </table>
+
         </div>
     )
 }

@@ -1,11 +1,10 @@
 import { useFormik } from 'formik';
 import React from 'react';
 import { useQuery } from 'react-query';
-import * as yup from 'yup';
-import { getCountries } from '../utils/api/fetch';
-import { json } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import * as yup from 'yup';
 import { FormData } from '../Types/UserInfoType';
+import { getCountries } from '../utils/api/fetch';
 
 const inputSchema = yup.object({
     name: yup.string().required("Name is required"),
@@ -47,14 +46,14 @@ const InputForm: React.FC = () => {
             existingValue.push(values);
             localStorage.setItem("datas", JSON.stringify(existingValue));
             formik.resetForm();
-            toast.success("Successfully Added")
-            // Handle form submission here
+            window.dispatchEvent(new Event("storage"))
+            toast.success("Successfully Added");
         }
     });
 
 
     return (
-        <form className="p-8 w-[60%] m-auto rounded-lg bg-slate-500 mt-4 text-white" onSubmit={formik.handleSubmit}>
+        <form className="p-8 w-[100%] sm:w-[90%] md:w-[80%] lg:w-[60%] m-auto rounded-lg bg-slate-500 mt-4 text-white" onSubmit={formik.handleSubmit}>
             <div className="my-4">
                 <label htmlFor="name" className="font-semibold text-gray-100 text-sm">
                     Full Name <span className='text-red-600'> *</span>
@@ -95,7 +94,7 @@ const InputForm: React.FC = () => {
                         type="email"
                         id="email-address-icon"
                         className="bg-slate-600 border border-slate-800 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 placeholder-gray-400"
-                        placeholder="name@flowbite.com"
+                        placeholder="yourname@email.com"
                         name="email"
                         value={formik.values.email}
                         onChange={formik.handleChange}
@@ -161,8 +160,8 @@ const InputForm: React.FC = () => {
 
             <fieldset className='border border-slate-50 p-4 rounded-xl'>
                 <legend className="font-semibold text-gray-100 text-lg">Address</legend>
-                <div className="flex gap-10">
-                    <div className="my-2 w-[50%]">
+                <div className="flex flex-col sm:flex-row sm:gap-10">
+                    <div className="my-2 w-[100%] md:w-[50%]">
                         <label htmlFor="city" className="font-semibold text-gray-100 text-sm">
                             City
                         </label>
@@ -180,7 +179,7 @@ const InputForm: React.FC = () => {
                             <div className="text-red-600">{formik.errors.city}</div>
                         ) : null}
                     </div>
-                    <div className="my-2 w-[50%]">
+                    <div className="my-2 w-[100%] md:w-[50%]">
                         <label htmlFor="district" className="font-semibold text-gray-100 text-sm">
                             District
                         </label>
@@ -259,7 +258,7 @@ const InputForm: React.FC = () => {
                     id="image"
                     name="image"
                     type="file"
-                    accept='application/pdf'
+                    accept='image/png   '
                     onChange={(event) => {
                         formik.setFieldValue("image", event.currentTarget.files?.[0]);
                     }}
