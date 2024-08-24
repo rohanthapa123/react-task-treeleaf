@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
@@ -29,6 +29,7 @@ const InputForm: React.FC = () => {
 
     const { id, setId } = useContext(EditContext)!;
 
+    
     const { data: countries } = useQuery({
         queryKey: ["country"],
         queryFn: getCountries,
@@ -49,7 +50,7 @@ const InputForm: React.FC = () => {
         },
         validationSchema: inputSchema,
         onSubmit: async (values) => {
-            
+
             const existingValue = getAllData();
             if (id) {
                 const index = existingValue.findIndex((item) => item.id === id);
@@ -318,13 +319,15 @@ const InputForm: React.FC = () => {
                 />
                 <div className="mt-1 text-sm text-gray-300" id="user_avatar_help">Only PNG allowed!</div>
             </div>
+            <div className='w-full flex justify-center'>
 
-            <button
-                type="submit"
-                className="bg-blue-600 text-white p-2 rounded-lg mt-4"
-            >
-                {id ? "Update" : "Submit"}
-            </button>
+                <button
+                    type="submit"
+                    className="bg-blue-600 text-white p-2 rounded-lg mt-4"
+                >
+                    {id ? "Update" : "Submit"}
+                </button>
+            </div>
         </form>
     );
 };

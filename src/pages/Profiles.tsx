@@ -8,7 +8,7 @@ import { getAllData } from '../utils/fetchFromLocal';
 const Profiles: React.FC = () => {
 
     const [data, setData] = useState<FormData[]>([]);
-    
+
     useEffect(() => {
         const getData = () => {
             const data = getAllData();
@@ -16,6 +16,7 @@ const Profiles: React.FC = () => {
         }
         getData();
     }, [])
+
 
     return (
         <div className='bg-slate-800 w-[100%] min-h-[100dvh] m-auto'>
@@ -27,8 +28,11 @@ const Profiles: React.FC = () => {
                 </div>
                 <h1 className='text-center font-semibold text-4xl text-white'>Profiles</h1>
                 <hr className='my-4' />
-                <div className=' w-full overflow-x-scroll rounded-md min-h-[370px]  bg-slate-500 mt-10 text-white'>
-                    <DataTable data={data} />
+                <div className=' w-full overflow-x-scroll rounded-md  bg-slate-500 mt-10 text-white'>
+                    {
+                        data.length <= 0 ? <h1 className=' text-center font-semibold text-4xl font-white'>No Data Found</h1> :
+                            <DataTable data={data} />
+                    }
                 </div>
             </div>
         </div>
